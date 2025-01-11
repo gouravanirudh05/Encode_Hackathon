@@ -1,0 +1,28 @@
+{
+  "name": "encode_hackathon",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "compromise": "^14.14.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "httpdispatcher": "^2.2.0",
+    "mysql2": "^3.12.0",
+    "openai": "^4.78.1",
+    "punycode": "^2.3.1",
+    "websocket": "^1.0.35",
+    "ws": "^8.18.0"
+  }
+}
