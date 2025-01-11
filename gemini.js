@@ -5,31 +5,62 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // Define your schemaType and construct the prompt
 const schemaType = {
-  database: "E-commerce",
+  database: "electronicStore",
   tables: [
     {
-      name: "Users",
-      columns: ["id: INT", "name: TEXT", "email: TEXT", "signup_date: DATE"],
+      name: "Brands",
+      columns: [
+        "BrandID: INT AUTO_INCREMENT PRIMARY KEY",
+        "Name: VARCHAR(255) UNIQUE NOT NULL",
+      ],
+    },
+    {
+      name: "Categories",
+      columns: [
+        "CategoryID: INT AUTO_INCREMENT PRIMARY KEY",
+        "Name: VARCHAR(255) UNIQUE NOT NULL",
+      ],
+    },
+    {
+      name: "Customers",
+      columns: [
+        "CustomerID: INT AUTO_INCREMENT PRIMARY KEY",
+        "Name: VARCHAR(255) NOT NULL",
+        "Email: VARCHAR(255) UNIQUE NOT NULL",
+        "Phone: VARCHAR(15)",
+        "Address: TEXT",
+      ],
     },
     {
       name: "Products",
-      columns: ["id: INT", "name: TEXT", "price: FLOAT", "category: TEXT"],
+      columns: [
+        "ProductID: INT AUTO_INCREMENT PRIMARY KEY",
+        "Name: VARCHAR(255) NOT NULL",
+        "BrandID: INT NOT NULL",
+        "CategoryID: INT NOT NULL",
+        "Price: DECIMAL(10,2) NOT NULL",
+        "Rating: DECIMAL(2,1)",
+        "Stock: INT NOT NULL DEFAULT 0",
+        "Description: TEXT",
+      ],
     },
     {
-      name: "Orders",
+      name: "Specifications",
       columns: [
-        "id: INT",
-        "user_id: INT",
-        "product_id: INT",
-        "order_date: DATE",
+        "SpecificationID: INT AUTO_INCREMENT PRIMARY KEY",
+        "ProductID: INT NOT NULL",
+        "Key: VARCHAR(255) NOT NULL",
+        "Value: VARCHAR(255) NOT NULL",
       ],
     },
   ],
   relationships: [
-    { from: "Users.id", to: "Orders.user_id" },
-    { from: "Products.id", to: "Orders.product_id" },
+    { from: "Products.BrandID", to: "Brands.BrandID" },
+    { from: "Products.CategoryID", to: "Categories.CategoryID" },
+    { from: "Specifications.ProductID", to: "Products.ProductID" },
   ],
 };
+
 
 // Function to format the schema into a text prompt
 function formatSchema(schema) {
@@ -45,7 +76,7 @@ function formatSchema(schema) {
 }
 
 // Construct the full prompt
-const userQuery = "give me the cheapest product";
+const userQuery = "why would you suggest buying HP pavillion 33";
 const schemaPrompt = formatSchema(schemaType);
 const prompt = `${schemaPrompt}\n\nGenerate a SQL query for the following request:\n"${userQuery}". Just return the code without any quotation marks`;
 
